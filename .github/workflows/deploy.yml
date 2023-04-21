@@ -15,15 +15,13 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
-    # 경고 무시
-      env: 
-        CI: false
+   
       
     # Nodejs 런타임 정보 설정
     strategy:
       matrix:
         node-version: [12.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # See supported Node.js release schedule at https://noqdejs.org/en/about/releases/
 
     steps:
       - uses: actions/checkout@v3
