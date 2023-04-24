@@ -16,7 +16,36 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v3
 
       - name: test
         run: echo "test"
+=======
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      # 모듈 설치
+      - name: Install modules
+        run: npm install
+      # testcode 실행
+      - name: Run test codes
+        run: npm run test
+      # 빌드
+      - name: Build project
+        run: npm run build
+      # 배포 
+      - uses: actions/checkout@v2
+      - name: Deploy build outputs
+        uses: seulGit/react-tetris@main
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PEM_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./build/*"
+>>>>>>> b2be6742c8d456edbe86b3afb92f9726ddd7bfb3
