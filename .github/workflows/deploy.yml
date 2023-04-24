@@ -8,15 +8,26 @@ name: deploy
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 # action 동작
 jobs:
   # OS 환경
   build:
     runs-on: self-hosted
+
+    # Nodejs 런타임 정보 설정
+    strategy:
+      matrix:
+        node-version: [12.x]
+        # See supported Node.js release schedule at https://noqdejs.org/en/about/releases/
+
     steps:
       - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - name: test
         run: echo "test"
