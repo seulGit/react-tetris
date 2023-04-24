@@ -41,7 +41,7 @@ jobs:
         run: CI=false npm run build
       # backup
       - name: Backup
-        run: mv ${{ secrets.BUILD_PATH }} ${{ secrets.BACKUP_PATH }}
+        run: mv ${{ secrets.BUILD_PATH }} ${{ secrets.BACKUP_PATH }}/$(date '+%Y%m%d-%H%M%S')
       # 배포 
       - name: Deploy build outputs
         run: mv ./build ${{ secrets.BUILD_PATH }}
