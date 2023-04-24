@@ -34,15 +34,13 @@ jobs:
         run: npm install
       # testcode 실행
       - name: Run test codes
-        run: npm run test
+        run: eco "test"
       # 빌드
       - name: Build project
-        run: eco "build error"
-        # npm run build
+        run: npm run build
       # 배포 
       - name: Deploy build outputs
-        run: eco "deploy error"
-        # scp -i ${{ secrets.PRIVATE_KEY_PATH }} ./build ubuntu@${{ secrets.HOST }}:/home/ubuntu/react-tetris/build
+        run: scp -i ${{ secrets.PRIVATE_KEY_PATH }} ./build ubuntu@${{ secrets.HOST }}:/home/ubuntu/react-tetris/build
 
 
 
