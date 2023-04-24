@@ -41,6 +41,7 @@ jobs:
       - name: Build project
         run: npm run build
       # 배포 
+      - uses: actions/checkout@v2
       - name: Deploy build outputs
         uses: seulGit/react-tetris@main
         with:
