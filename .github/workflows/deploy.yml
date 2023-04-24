@@ -24,9 +24,9 @@ jobs:
         # See supported Node.js release schedule at https://noqdejs.org/en/about/releases/
 
     steps:
-      - uses: deploy/checkout@v3
+      - uses: actions/checkout@main
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: deploy/setup-node@v3
+        uses: actions/setup-node@main
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
