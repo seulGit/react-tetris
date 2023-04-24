@@ -34,7 +34,7 @@ jobs:
         run: npm install
       # testcode 실행
       - name: Run test codes
-        run: eco "test"
+        run: echo "test"
       # 빌드
       - name: Build project
         run: npm run build
