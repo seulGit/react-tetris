@@ -37,7 +37,8 @@ jobs:
         run: npm run test
       # 빌드
       - name: Build project
-        run: npm run build
+        run: eco "build error"
+        # npm run build
       # 배포 
       - name: Deploy build outputs
         run: eco "deploy error"
