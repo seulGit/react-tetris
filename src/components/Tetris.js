@@ -63,6 +63,19 @@ const Tetris = () => {
     }
   };
 
+  const dropToBottom = () => {
+    console.log("★★★★★★★★★★★★★★★★★★11111111");
+    if(checkCollision !== true) {
+      console.log("★★★★★★★★★★★★★★★★★★2222222");
+      
+      if (player.pos.y === 0) {
+        console.log("★★★★★★★★★★★★★★★★★★33333333333");
+        setDropTime(1000 / (level + 1) + 200);
+      }
+    } 
+    
+  }
+
   const keyUp = ({ keyCode }) => {
     if (!gameOver) {
       if (keyCode === 40) {
@@ -78,7 +91,9 @@ const Tetris = () => {
     drop();
   };
 
+  let flagHold = true;
   const move = ({ keyCode }) => {
+    
     if (!gameOver) {
       if (keyCode === 37) {
         movePlayer(-1);
@@ -86,15 +101,32 @@ const Tetris = () => {
         movePlayer(1);
       } else if (keyCode === 40) {
         dropPlayer();
+        console.log("xxxxxxxxxxxxxxxxxxxx"+player.pos.y);
       } else if (keyCode === 38) {
         playerRotate(stage, 1);
-      }
+      } else if (keyCode === 32) {
+        //updatePlayerPos({ x: 0, y: 0, collided: true });
+       // const test = () => {
+       //   setDropTime(1);
+       // }
+       dropToBottom(); 
+       // test();
+        //drop();
+      } /*else if (keyCode === 13) {
+        if (flagHold===true) {
+        setDropTime(null);
+        flagHold = false;
+        } else {
+          setDropTime(1000 / (level + 1) + 200);
+        }
+        
+      }*/
     }
   };
 
   useInterval(() => {
     drop();
-  }, dropTime)
+  }, dropTime);
 
 
   return (
@@ -111,7 +143,7 @@ const Tetris = () => {
               <Display text={`Level: ${level}`} />
             </div>
           )}
-          <StartButton callback={startGame} />
+          <StartButton callback={startGame}/>
         </aside>
       </StyledTetris>
     </StyledTetrisWrapper>
