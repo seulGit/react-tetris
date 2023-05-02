@@ -14,6 +14,8 @@ import { useGameStatus } from '../hooks/useGameStatus';
 import Display from "./Display";
 import Stage from "./Stage";
 import StartButton from "./StartButton";
+import HoldButton from "./HoldButton";
+import DirectionButton from "./DirectionButton";
 
 const Tetris = () => {
   const [dropTime, setDropTime] = useState(null);
@@ -137,6 +139,8 @@ const Tetris = () => {
               </div>
             )}
             <StartButton callback={startGame} />
+            <HoldButton hold={hold} text={`${holdFlag ? 'GO' : 'PAUSE' }`} />
+            <DirectionButton text={`rotate`} />
           </aside>
         </StyledTetris>
       </StyledTetrisWrapper>
