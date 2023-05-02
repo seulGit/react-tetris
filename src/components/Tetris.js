@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { createStage, checkCollision } from "../gameHelpers";
-import { useRef } from "react";
-import { useEffect } from "react";
 
 // Styled Components
 import { StyledTetris, StyledTetrisWrapper } from "./styles/StyledTetris";
@@ -16,7 +14,6 @@ import { useGameStatus } from '../hooks/useGameStatus';
 import Display from "./Display";
 import Stage from "./Stage";
 import StartButton from "./StartButton";
-import App from "../App";
 
 const Tetris = () => {
   const [dropTime, setDropTime] = useState(null);
@@ -26,6 +23,8 @@ const Tetris = () => {
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
 
+  // 기본 속도
+  const timePerLevel = 1000 / (level + 1) + 200 ;
 
   console.log("re-render");
 
@@ -35,8 +34,11 @@ const Tetris = () => {
     }
   };
 
-
-  const startGame = () => {
+  const startGame = (e) => {
+    // 엔터/스페이스바 클릭 시 새로고침 방지
+    if (e.keyCode === 32 || e.keyCode === 13) {
+      e.preventDefault();
+    } else {
     console.log("test");
     //Reset everything
     setStage(createStage());
@@ -46,9 +48,7 @@ const Tetris = () => {
     setScore(0);
     setRows(0);
     setLevel(0);
-    document.activeElement.blur();
-    //focusDiv.current.focus();
-    //testClick();
+    }
   };
 
   const drop = () => {
@@ -56,7 +56,7 @@ const Tetris = () => {
     if (rows > (level + 1) *10) {
       setLevel(prev => prev + 1);
       // Allso increase speed
-      setDropTime(1000 / (level + 1) + 200);
+      setDropTime(timePerLevel);
     }
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
       updatePlayerPos({ x: 0, y: 1, collided: false });
@@ -67,7 +67,7 @@ const Tetris = () => {
         setGameOver(true);
         setDropTime(null);
       } else {
-        setDropTime(1000 / (level + 1) + 200);
+        setDropTime(timePerLevel);
       }
       updatePlayerPos({ x: 0, y: 0, collided: true });
     }
@@ -77,7 +77,7 @@ const Tetris = () => {
     if (!gameOver) {
       if (keyCode === 40) {
         console.log("interval on");
-        setDropTime(1000 / (level + 1) + 200);
+        setDropTime(timePerLevel);
       }
     }
   }
@@ -87,79 +87,60 @@ const Tetris = () => {
     setDropTime(null);
     drop();
   };
-
-  
-  
-  /*let flagFn = () => {
-    console.log(enterFlag);
-    if(enterFlag===true) {
-      setDropTime(null);
-    }else {
-      setDropTime(1000 / (level + 1) + 200);
-    }
-    enterFlag = !enterFlag;
-    console.log("222222"+enterFlag);
-  }
-  */
  
- let enterFlag = true;
+  const[holdFlag, setHoldFlag] = useState(false);
 
+  const hold = () => {
+    if (!holdFlag) {
+      setDropTime(null);
+    } else {
+      setDropTime(timePerLevel);
+    }
+    setHoldFlag(!holdFlag);
+  };
+  
   const move = ({ keyCode }) => {
-    
     if (!gameOver) {
-
       if (keyCode === 37) {
         movePlayer(-1);
-      } else if (keyCode === 39) {
-        movePlayer(1);
-      } else if (keyCode === 40) {
-        dropPlayer();
-      } else if (keyCode === 38) {
-        playerRotate(stage, 1);
-      } else if (keyCode === 32) {
-        setDropTime(1);
-      } else if (keyCode === 13) {
-        //flagFn();
-  
-        console.log(enterFlag);
-        if(enterFlag===true) {
-          setDropTime(null);
-        }else {
-          setDropTime(1000 / (level + 1) + 200);
+        } else if (keyCode === 39) {
+          movePlayer(1);
+        } else if (keyCode === 40) {
+          dropPlayer();
+        } else if (keyCode === 38) {
+          playerRotate(stage, 1);
+        } else if (keyCode === 32) {
+          setDropTime(1);
+        } else if (keyCode === 13) {
+          hold();
         }
-        enterFlag = !enterFlag;
-        console.log("222222"+enterFlag);
-      
       }
-    }
-  };
+    };
 
-  useInterval(() => {
-    drop();
-  }, dropTime);
-
+    useInterval(() => {
+      drop();
+    }, dropTime);
 
 
-
-  return (
-    <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={(e) => move(e)} onKeyUp={keyUp}>
-      <StyledTetris>
-        <Stage stage={stage} />
-        <aside>
-          {gameOver ? (
-            <Display gameOver={gameOver} text="Game Over" />
-          ) : (
-            <div>
-              <Display text={`Score: ${score}`} />
-              <Display text={`Row: ${rows}`} />
-              <Display text={`Level: ${level}`} />
-            </div>
-          )}
-          <StartButton callback={startGame} />
-        </aside>
-      </StyledTetris>
-    </StyledTetrisWrapper>
-  );
+    return (
+      <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={(e) => move(e)} onKeyUp={keyUp}>
+        <StyledTetris>
+          <Stage stage={stage} />
+          <aside>
+            {gameOver ? (
+              <Display gameOver={gameOver} text="Game Over" />
+            ) : (
+              <div>
+                <Display text={`Score: ${score}`} />
+                <Display text={`Row: ${rows}`} />
+                <Display text={`Level: ${level}`} />
+              </div>
+            )}
+            <StartButton callback={startGame} />
+          </aside>
+        </StyledTetris>
+      </StyledTetrisWrapper>
+    );
 };
 
 export default Tetris;
