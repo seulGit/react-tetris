@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { createStage, checkCollision } from "../gameHelpers";
 import { useRef } from "react";
+import { useEffect } from "react";
 
 // Styled Components
 import { StyledTetris, StyledTetrisWrapper } from "./styles/StyledTetris";
@@ -15,6 +16,7 @@ import { useGameStatus } from '../hooks/useGameStatus';
 import Display from "./Display";
 import Stage from "./Stage";
 import StartButton from "./StartButton";
+import App from "../App";
 
 const Tetris = () => {
   const [dropTime, setDropTime] = useState(null);
@@ -25,18 +27,6 @@ const Tetris = () => {
   const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared);
 
 
-  // 포커싱 안되는 부분 ***********************
-  const focusDiv = useRef(null);
-
-  const testClick = () => {
-    focusDiv.current.focus();
-  }
-
-  // 포커싱 안되는 부분 ***********************
-
-
-
-
   console.log("re-render");
 
   const movePlayer = (dir) => {
@@ -44,6 +34,7 @@ const Tetris = () => {
       updatePlayerPos({ x: dir, y: 0 });
     }
   };
+
 
   const startGame = () => {
     console.log("test");
@@ -55,12 +46,9 @@ const Tetris = () => {
     setScore(0);
     setRows(0);
     setLevel(0);
-    //document.activeElement.blur();
+    document.activeElement.blur();
     //focusDiv.current.focus();
-
-    // 포커싱 안되는 부분 ***********************
-    testClick();
-    // 포커싱 안되는 부분 ***********************
+    //testClick();
   };
 
   const drop = () => {
@@ -78,9 +66,10 @@ const Tetris = () => {
         console.log("GAME OVER");
         setGameOver(true);
         setDropTime(null);
+      } else {
+        setDropTime(1000 / (level + 1) + 200);
       }
       updatePlayerPos({ x: 0, y: 0, collided: true });
-      setDropTime(1000 / (level + 1) + 200);
     }
   };
 
@@ -99,9 +88,26 @@ const Tetris = () => {
     drop();
   };
 
+  
+  
+  /*let flagFn = () => {
+    console.log(enterFlag);
+    if(enterFlag===true) {
+      setDropTime(null);
+    }else {
+      setDropTime(1000 / (level + 1) + 200);
+    }
+    enterFlag = !enterFlag;
+    console.log("222222"+enterFlag);
+  }
+  */
+ 
+ let enterFlag = true;
+
   const move = ({ keyCode }) => {
     
     if (!gameOver) {
+
       if (keyCode === 37) {
         movePlayer(-1);
       } else if (keyCode === 39) {
@@ -112,6 +118,18 @@ const Tetris = () => {
         playerRotate(stage, 1);
       } else if (keyCode === 32) {
         setDropTime(1);
+      } else if (keyCode === 13) {
+        //flagFn();
+  
+        console.log(enterFlag);
+        if(enterFlag===true) {
+          setDropTime(null);
+        }else {
+          setDropTime(1000 / (level + 1) + 200);
+        }
+        enterFlag = !enterFlag;
+        console.log("222222"+enterFlag);
+      
       }
     }
   };
@@ -122,10 +140,11 @@ const Tetris = () => {
 
 
 
+
   return (
     <StyledTetrisWrapper role="button" tabIndex="0" onKeyDown={(e) => move(e)} onKeyUp={keyUp}>
       <StyledTetris>
-        <Stage stage={stage} ref={focusDiv} />
+        <Stage stage={stage} />
         <aside>
           {gameOver ? (
             <Display gameOver={gameOver} text="Game Over" />
