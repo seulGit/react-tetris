@@ -36,7 +36,7 @@ const Tetris = () => {
 
   const startGame = (e) => {
     // 엔터/스페이스바 클릭 시 새로고침 방지
-    if (e.keyCode === 32 || e.keyCode === 13) {
+    if (e.keyCode) {
       e.preventDefault();
     } else {
     console.log("test");
