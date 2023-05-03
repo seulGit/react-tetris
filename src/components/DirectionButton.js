@@ -1,7 +1,7 @@
 import React from "react";
 import { StyledDirectionButton } from "./styles/StyledDirectionButton";
 
-const DirectionButton = ({ text , move }) => (
+const DirectionButton = ({ move, text }) => (
   <StyledDirectionButton onClick={move}>{text}</StyledDirectionButton>
 );
 

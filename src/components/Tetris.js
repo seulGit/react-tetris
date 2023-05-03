@@ -144,8 +144,8 @@ const Tetris = () => {
               <DirectionButton move={() => movePlayer(-1)} text={`left`} />
               <DirectionButton move={() => movePlayer(1)} text={`right`} />
               <DirectionButton move={() => playerRotate(stage, 1)} text={`rotate`} />
-              <DirectionButton move={dropPlayer} text={`down`} />
-              <DirectionButton move={setDropTime} text={`drop`} />
+              <DirectionButton move={() => drop()} text={`down`} />
+              <DirectionButton move={() => setDropTime(1)} text={`drop`} />
             </div>
           </aside>
         </StyledTetris>
