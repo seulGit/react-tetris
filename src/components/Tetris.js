@@ -140,7 +140,13 @@ const Tetris = () => {
             )}
             <StartButton callback={startGame} />
             <HoldButton hold={hold} text={`${holdFlag ? 'GO' : 'PAUSE' }`} />
-            <DirectionButton text={`rotate`} />
+            <div>
+              <DirectionButton move={() => movePlayer(-1)} text={`left`} />
+              <DirectionButton move={() => movePlayer(1)} text={`right`} />
+              <DirectionButton move={() => playerRotate(stage, 1)} text={`rotate`} />
+              <DirectionButton move={dropPlayer} text={`down`} />
+              <DirectionButton move={setDropTime} text={`drop`} />
+            </div>
           </aside>
         </StyledTetris>
       </StyledTetrisWrapper>

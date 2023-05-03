@@ -1,7 +1,7 @@
 import React from "react";
 import { StyledHoldButton } from "./styles/StyledHoldButton";
 
-const HoldButton = ({ hold , text }) => (
+const HoldButton = ({ text, hold }) => (
   <StyledHoldButton onClick={hold}>{text}</StyledHoldButton>
 );
 
